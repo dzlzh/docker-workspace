@@ -46,6 +46,24 @@ services:
             - ${PHP_FPM_CONF_FILE}:/usr/local/etc/php/php-fpm.conf:ro
             - ${PHP_LOG_DIR}:/var/log/php/:rw
 
+    mysql:
+        build:
+            args:
+                MYSQL_VERSION: ${MYSQL_VERSION}
+            context: ./config/mysql
+        container_name: mysql
+        environment:
+            TZ: $TZ
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        networks:
+            - backend
+        ports:
+            - "${MYSQL_HOST_PORT}:3306"
+        restart: always
+        volumes:
+            - ${MYSQL_CONF_FILE}:/etc/mysql/conf.d/mysql.conf:ro
+            - ${MYSQL_DATA_DIR}:/var/lib/mysql/:rw
+
 networks:
     backend:
     frontend:
