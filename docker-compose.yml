@@ -9,7 +9,7 @@ services:
         depends_on:
             - php
         environment:
-            TZ: $TZ
+            TZ: ${TZ}
         networks:
             - frontend
         ports:
@@ -33,7 +33,7 @@ services:
             - SYS_PTRACE
         container_name: php
         environment:
-            TZ: $TZ
+            TZ: ${TZ}
         networks:
             - backend
             - frontend
@@ -47,13 +47,10 @@ services:
             - ${PHP_LOG_DIR}:/var/log/php/:rw
 
     mysql:
-        build:
-            args:
-                MYSQL_VERSION: ${MYSQL_VERSION}
-            context: ./config/mysql
+        image: mysql:${MYSQL_VERSION}
         container_name: mysql
         environment:
-            TZ: $TZ
+            TZ: ${TZ}
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
         networks:
             - backend
@@ -63,6 +60,20 @@ services:
         volumes:
             - ${MYSQL_CONF_FILE}:/etc/mysql/conf.d/mysql.conf:ro
             - ${MYSQL_DATA_DIR}:/var/lib/mysql/:rw
+
+    redis:
+        image: redis:${REDIS_VERSION}
+        container_name: redis
+        environment:
+            TZ: ${TZ}
+        entrypoint: ["redis-server", "/etc/redis.conf"]
+        networks:
+            - backend
+        ports:
+            - "${REDIS_HOST_PORT}:6379"
+        restart: always
+        volumes:
+            - ${REDIS_CONF_FILE}:/etc/redis.conf:ro
 
 networks:
     backend:
