@@ -1,4 +1,3 @@
 /src
 /config/nginx/conf.d/
-!/config/nginx/conf.d/localhost.conf
-!/config/nginx/conf.d/localhost_https.conf
+!/config/nginx/conf.d/example.conf
