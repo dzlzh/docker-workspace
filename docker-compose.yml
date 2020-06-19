@@ -19,6 +19,7 @@ services:
                 ALPINE_REPOSITORIES: ${ALPINE_REPOSITORIES}
                 PHP_VERSION: ${PHP_VERSION}
                 PHP_REDIS_VERSION: ${PHP_REDIS_VERSION}
+                PHP_SWOOLE_VERSION: ${PHP_SWOOLE_VERSION}
             context: ./config/php
         cap_add:
             - SYS_PTRACE
