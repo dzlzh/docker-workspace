@@ -1,7 +1,6 @@
-# 构建
+# Build
 ARG GO_VERSION
 FROM golang:${GO_VERSION}-alpine AS build
-
 WORKDIR /go/src
 ADD . .
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o app .
