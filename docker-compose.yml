@@ -60,7 +60,6 @@ services:
             - "${NGINX_HTTPS_HOST_PORT}:443"
         restart: always
         volumes:
-            - ${SRC_DIR}:/var/www/html/:rw
             - ${NGINX_CONFD_DIR}:/etc/nginx/conf.d/:ro
             - ${NGINX_CONF_FILE}:/etc/nginx/nginx.conf:ro
             - ${NGINX_LOG_DIR}:/var/log/nginx/:rw
