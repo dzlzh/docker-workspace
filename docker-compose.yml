@@ -63,6 +63,7 @@ services:
             - ${NGINX_CONFD_DIR}:/etc/nginx/conf.d/:ro
             - ${NGINX_CONF_FILE}:/etc/nginx/nginx.conf:ro
             - ${NGINX_LOG_DIR}:/var/log/nginx/:rw
+            - ${SRC_DIR}:/var/www/html/:rw
 
     mysql:
         image: mysql:${MYSQL_VERSION}
