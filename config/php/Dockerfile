@@ -13,15 +13,22 @@ RUN ln -snf /use/share/zoneinfo/$TZ /etc/localtime \
     fi \
     && apk add --no-cache autoconf g++ libtool make curl-dev libxml2-dev linux-headers \
     freetype-dev libjpeg-turbo-dev libpng-dev bzip2-dev libzip-dev \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && mkdir -p /usr/src/php/ext \
-    && wget https://github.com/phpredis/phpredis/archive/${PHP_REDIS_VERSION}.tar.gz \
-    && tar -zxvf ${PHP_REDIS_VERSION}.tar.gz \
-    && mv phpredis-${PHP_REDIS_VERSION} /usr/src/php/ext/redis \
-    && wget https://github.com/swoole/swoole-src/archive/v${PHP_SWOOLE_VERSION}.tar.gz \
-    && tar -zxvf v${PHP_SWOOLE_VERSION}.tar.gz \
-    && mv swoole-src-${PHP_SWOOLE_VERSION} /usr/src/php/ext/swoole \
-    && docker-php-ext-install -j$(nproc) pdo_mysql zip mysqli mbstring bcmath \
-    opcache sockets gd bz2 curl redis swoole
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) pdo_mysql zip mysqli mbstring bcmath opcache sockets gd bz2 curl
+
+RUN if [ "${PHP_REDIS_VERSION}" != "" ]; then \
+        wget https://github.com/phpredis/phpredis/archive/${PHP_REDIS_VERSION}.tar.gz \
+        && tar -zxvf ${PHP_REDIS_VERSION}.tar.gz \
+        && mv phpredis-${PHP_REDIS_VERSION} /usr/src/php/ext/redis \
+        && docker-php-ext-install -j$(nproc) redis; \
+    fi
+
+RUN if [ "${PHP_SWOOLE_VERSION}" != "" ]; then \
+        wget https://github.com/swoole/swoole-src/archive/v${PHP_SWOOLE_VERSION}.tar.gz \
+        && tar -zxvf v${PHP_SWOOLE_VERSION}.tar.gz \
+        && mv swoole-src-${PHP_SWOOLE_VERSION} /usr/src/php/ext/swoole \
+        && docker-php-ext-install -j$(nproc) swoole; \
+    fi
 
 WORKDIR /var/www/html
