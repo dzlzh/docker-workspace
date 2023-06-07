@@ -12,10 +12,10 @@ RUN ln -snf /use/share/zoneinfo/$TZ /etc/localtime \
         sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_REPOSITORIES}/g" /etc/apk/repositories; \
     fi \
     && apk add --no-cache autoconf g++ libtool make curl-dev libxml2-dev linux-headers \
-    freetype-dev libjpeg-turbo-dev libpng-dev bzip2-dev libzip-dev \
+    freetype-dev libjpeg-turbo-dev libpng-dev bzip2-dev libzip-dev oniguruma-dev \
     && mkdir -p /usr/src/php/ext \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) pdo_mysql zip mysqli mbstring bcmath opcache sockets gd bz2 curl
+    && docker-php-ext-install -j$(nproc) gd curl pdo_mysql mbstring bcmath opcache sockets zip bz2
 
 RUN if [ "${PHP_REDIS_VERSION}" != "" ]; then \
         wget https://github.com/phpredis/phpredis/archive/${PHP_REDIS_VERSION}.tar.gz \
